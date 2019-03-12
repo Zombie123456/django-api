@@ -15,20 +15,21 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-
+from django.views.static import serve
 from loginsvc.views import login, logout, refresh_access_token
-
+from mewtwo import settings
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^v1/', include('account.urls'), name='accounts'),
+    url(r'^v1/', include('qrpayment.urls'), name='qrpayment'),
 
     # dashboard apis without routers
     url(r'^manage/login/$', login, name='dashboard_login'),
     url(r'^manage/login/refresh/', refresh_access_token,
         name='dashboard_refresh'),
-
     url(r'^logout/$', logout, name='account_logout'),
-    url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider'))
+    url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
 
+    url(r'^upload/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 ]
