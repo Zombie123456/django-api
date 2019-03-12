@@ -1,7 +1,7 @@
+from rest_framework import serializers
 from qrpayment.models import (QRCode,
                               PaymentType,
                               Transaction)
-from rest_framework import serializers
 
 
 class QRCodeSerializer(serializers.ModelSerializer):

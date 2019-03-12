@@ -1,25 +1,25 @@
-import logging
 import re
+import logging
 
-from django.contrib.auth import authenticate
-from django.utils.translation import ugettext_lazy as _
-from django.views.decorators.csrf import csrf_exempt
 from rest_condition import Or
+from django.contrib.auth import authenticate
 from rest_framework import mixins, viewsets
+from rest_framework.response import Response
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import (api_view,
                                        permission_classes)
-from rest_framework.response import Response
+from django.utils.translation import ugettext_lazy as _
 
 from account.models import Staff
+from mewtwo.lib import constants
 from account.serializers import StaffSerializer
+from loginsvc.permissions import IsAdmin, IsStaff
+from loginsvc.views import generate_response, force_logout
 from mewtwo.utils import (parse_request_for_token,
                           get_user_type,
                           get_valid_token,
                           get_request_data,
                           MewtwoRenderer)
-from mewtwo.lib import constants
-from loginsvc.permissions import IsAdmin, IsStaff
-from loginsvc.views import generate_response, force_logout
 
 
 logger = logging.getLogger(__name__)

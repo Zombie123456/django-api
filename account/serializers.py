@@ -1,8 +1,8 @@
 import re
 
+from rest_framework import serializers
 from django.contrib.auth.models import User, Group
 from django.core.exceptions import ObjectDoesNotExist
-from rest_framework import serializers
 
 from account.models import Staff
 from mewtwo.lib import constants

@@ -1,6 +1,7 @@
-from django.conf.urls import url, include
-from qrpayment import views as qrpayment
 from rest_framework import routers
+from django.conf.urls import url, include
+
+from qrpayment import views as qrpayment
 
 
 member_router = routers.DefaultRouter()

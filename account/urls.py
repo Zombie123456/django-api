@@ -1,9 +1,10 @@
 from django.conf.urls import url, include
-from account import views as account
-from rest_framework import routers
 from django.views.static import serve
-from loginsvc.views import login, logout, refresh_access_token
+from rest_framework import routers
+
+from account import views as account
 from mewtwo import settings
+from loginsvc.views import login, logout, refresh_access_token
 
 
 manage_router = routers.DefaultRouter()

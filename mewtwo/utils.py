@@ -238,7 +238,7 @@ class PathAndRename(object):
         ext = filename.split('.')[-1]
 
         # set filename as random string
-        filename = '{}.{}'.format(uuid4().hex, ext)
+        filename = f'{uuid4().hex}.{ext}'
 
         # return the whole path to the file
         return os.path.join(self.path, filename)

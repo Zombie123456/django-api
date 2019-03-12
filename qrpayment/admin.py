@@ -1,7 +1,7 @@
 from django.contrib import admin
-from qrpayment.models import (Transaction,
-                       QRCode,
-                       PaymentType)
+from qrpayment.models import (QRCode,
+                              Transaction,
+                              PaymentType)
 
 
 class TransactionAdmin(admin.ModelAdmin):

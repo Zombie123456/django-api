@@ -1,9 +1,11 @@
 from __future__ import unicode_literals
 import uuid
 import datetime
+
 from django.db import models
-from mewtwo.utils import PathAndRename
 from django.contrib.auth.models import User
+
+from mewtwo.utils import PathAndRename
 
 
 STATUS_OPTIONS = (

@@ -1,18 +1,21 @@
+from urllib.parse import urlencode
+
+from rest_condition import Or
+from django.shortcuts import render
+from django.http import HttpResponse
 from rest_framework import mixins, viewsets
+from rest_framework.response import Response
+
+from mewtwo.lib import constants
+from mewtwo.utils import MewtwoRenderer
 from qrpayment.models import (QRCode,
                               Transaction,
                               PaymentType)
-from rest_condition import Or
-from rest_framework.response import Response
-from loginsvc.permissions import IsAdmin, IsStaff
+from loginsvc.permissions import (IsAdmin,
+                                  IsStaff)
 from qrpayment.serializers import (QRCodeSerializer,
                                    PaymentTypeSerializer,
                                    TransactionSerializer)
-from django.shortcuts import render
-from mewtwo.lib import constants
-from mewtwo.utils import MewtwoRenderer
-from urllib.parse import urlencode
-from django.http import HttpResponse
 
 
 class PaymentTypeMemberViewSet(mixins.CreateModelMixin,

@@ -1,5 +1,5 @@
-from django.utils.translation import ugettext as _
 from rest_framework import permissions
+from django.utils.translation import ugettext as _
 
 
 class IsAdmin(permissions.BasePermission):
