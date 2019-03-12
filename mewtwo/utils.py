@@ -1,11 +1,13 @@
 import logging
-
+import os
+from uuid import uuid4
 from django.utils.translation import ugettext as _
 from django_otp.plugins.otp_totp.models import TOTPDevice
 from rest_framework import renderers
 from rest_framework.exceptions import ErrorDetail
 from oauth2_provider.models import AccessToken
 from mewtwo.lib import constants
+from django.utils.deconstruct import deconstructible
 
 
 logger = logging.getLogger(__name__)
@@ -224,3 +226,19 @@ def get_user_type(user):
         else:
             return 'admin'
     return None
+
+
+@deconstructible
+class PathAndRename(object):
+
+    def __init__(self, sub_path):
+        self.path = sub_path
+
+    def __call__(self, instance, filename):
+        ext = filename.split('.')[-1]
+
+        # set filename as random string
+        filename = '{}.{}'.format(uuid4().hex, ext)
+
+        # return the whole path to the file
+        return os.path.join(self.path, filename)

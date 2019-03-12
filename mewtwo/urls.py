@@ -16,19 +16,10 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 
-from loginsvc.views import login, logout, refresh_access_token
-
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^v1/', include('account.urls'), name='accounts'),
-
-    # dashboard apis without routers
-    url(r'^manage/login/$', login, name='dashboard_login'),
-    url(r'^manage/login/refresh/', refresh_access_token,
-        name='dashboard_refresh'),
-
-    url(r'^logout/$', logout, name='account_logout'),
-    url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider'))
+    url(r'^v1/', include('qrpayment.urls'), name='qrpayment'),
 
 ]

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>付款</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="initial-scale=1.0, width=device-width, user-scalable=no" />
+<script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
+</head>
+<body>
+  <div class="header"> </div>
+  <form id="payform">
+     <div class="form-group">
+        <label for="money">付款金额</label>
+        <input type="text" class="form-control" id="money"  name="money" placeholder="付款金额">
+     </div>
+     <div class="form-group">
+        <label for="remark">会员账号</label>
+        <input type="text" class="form-control" id="remark" name="remark" placeholder="备注">
+     </div>
+  </form>
+  <a href="javascript:;" onclick="save()" class="ljzf_but all_w">立即付款</a>
+</body>
+<script type="text/javascript">
+  function save(){
+    var regu = /^[0-9]+\.?[0-9]*$/;
+    var num = $('#money').val()
+    var user = $('#remark').val()
+    if (!regu.test(num)) {
+      alert('请输入数字')
+    } else if (user == '') {
+      alert('请输入会员账号')
+    } else{
+      var data = $('#payform').serialize();
+      $.ajax({
+        url: "/v1/member/alipaytobank/",
+        data: data,
+        type: "post",
+        dataType: "json",
+        success: function(data) {
+          if(data.code==2000){
+          window.location.href=data.url;
+             return;
+          }else{
+            alert(data.msg);
+          }
+        }
+      });
+    }
+
+  }
+</script>
+</html>
+<style type="text/css">
+* {
+  margin: 0;
+  padding: 0;
+}
+.header {
+  background: #393a3e;
+  color: #f5f7f6;
+  height: auto;
+  height: 45px;
+  overflow: hidden;
+}
+label {
+  display: inline-block;
+  max-width: 100%;
+  margin-bottom: 5px;
+  font-weight: 700;
+}
+#payform {
+  width: 90%;
+  margin: 0 auto;
+}
+.form-group {
+  margin: 20px 0;
+}
+.form-control {
+  display: block;
+  width: 100%;
+  height: 20px;
+  padding: 6px 0;
+  text-indent: 10px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #555;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.ljzf_but {
+    border-radius: 3px;
+    height: 45px;
+    line-height: 45px;
+    width: 90%;
+    margin: 0 auto;
+    background: #44bf16;
+    display: block;
+    text-align: center;
+    font-size: 16px;
+    margin-top: 14px;
+    color: #fff;
+}
+</style>
