@@ -22,9 +22,8 @@ TRANSACTION_STATUS_OPTIONS = (
 
 
 SCAN_CODE_OPTIONS = (
-    (0, 'no_scan'),
-    (1, 'scan'),
-    (2, 'bank_scan')
+    (0, 'qr_code'),
+    (1, 'bank_scan')
 )
 
 

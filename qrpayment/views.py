@@ -5,7 +5,10 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from rest_framework import mixins, viewsets
 from rest_framework.response import Response
+from mewtwo.throttling import CustomAnonThrottle
 
+from qrpayment.paginations import PaginationForTransaction
+from qrpayment.filters import TransactionFilter
 from mewtwo.lib import constants
 from mewtwo.utils import MewtwoRenderer
 from qrpayment.models import (QRCode,
@@ -14,18 +17,19 @@ from qrpayment.models import (QRCode,
 from loginsvc.permissions import (IsAdmin,
                                   IsStaff)
 from qrpayment.serializers import (QRCodeSerializer,
+                                   PaymentTypeMemberSerializer,
+                                   TransactionMemberSerializer,
                                    PaymentTypeSerializer,
                                    TransactionSerializer)
 
 
-class PaymentTypeMemberViewSet(mixins.CreateModelMixin,
-                               mixins.ListModelMixin,
+class PaymentTypeMemberViewSet(mixins.ListModelMixin,
                                viewsets.GenericViewSet):
 
     model = PaymentType
     queryset = PaymentType.objects.filter(status=1)
     permission_classes = []
-    serializer_class = PaymentTypeSerializer
+    serializer_class = PaymentTypeMemberSerializer
     renderer_classes = [MewtwoRenderer]
 
     def list(self, request, *args, **kwargs):
@@ -44,7 +48,8 @@ class TransactionMemberView(mixins.CreateModelMixin,
     model = Transaction
     permission_classes = []
     renderer_classes = [MewtwoRenderer]
-    serializer_class = TransactionSerializer
+    serializer_class = TransactionMemberSerializer
+    throttle_classes = (CustomAnonThrottle,)
 
 
 class BankQrcodeMemberViewSet(viewsets.GenericViewSet):
@@ -88,3 +93,44 @@ class BankQrcodeMemberViewSet(viewsets.GenericViewSet):
         params_url = urlencode(params)
         alipay_api = f'alipays://platformapi/startapp?{params_url}'
         return Response({'code': constants.ALL_OK, 'url': alipay_api})
+
+
+class PaymentTypeViewSet(mixins.RetrieveModelMixin,
+                         mixins.ListModelMixin,
+                         mixins.UpdateModelMixin,
+                         viewsets.GenericViewSet):
+
+    model = PaymentType
+    permission_classes = [Or(IsStaff, IsAdmin)]
+    permission_classes = []
+    queryset = PaymentType.objects.all()
+    serializer_class = PaymentTypeSerializer
+    renderer_classes = [MewtwoRenderer]
+
+
+class QRCodeViewSet(mixins.RetrieveModelMixin,
+                    mixins.CreateModelMixin,
+                    mixins.ListModelMixin,
+                    mixins.UpdateModelMixin,
+                    mixins.DestroyModelMixin,
+                    viewsets.GenericViewSet):
+
+    model = QRCode
+    permission_classes = [Or(IsStaff, IsAdmin)]
+    permission_classes = []
+    queryset = QRCode.objects.all()
+    serializer_class = QRCodeSerializer
+
+
+class TransactionViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin,
+                         mixins.UpdateModelMixin, viewsets.GenericViewSet):
+
+    model = Transaction
+    queryset = Transaction.objects.all().order_by('-created_at')
+    permission_classes = [Or(IsStaff, IsAdmin)]
+    permission_classes = []
+    serializer_class = TransactionSerializer
+    renderer_classes = [MewtwoRenderer]
+    filter_class = TransactionFilter
+    pagination_class = PaginationForTransaction
+

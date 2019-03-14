@@ -1,4 +1,6 @@
 from rest_framework import serializers
+
+from mewtwo.lib import constants
 from qrpayment.models import (QRCode,
                               PaymentType,
                               Transaction)
@@ -11,7 +13,7 @@ class QRCodeSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class PaymentTypeSerializer(serializers.ModelSerializer):
+class PaymentTypeMemberSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PaymentType
@@ -31,8 +33,43 @@ class PaymentTypeSerializer(serializers.ModelSerializer):
         return ret
 
 
-class TransactionSerializer(serializers.ModelSerializer):
+class TransactionMemberSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Transaction
         fields = '__all__'
+
+
+class PaymentTypeSerializer(serializers.ModelSerializer):
+    qr_codes = QRCodeSerializer(source='qrcodes', many=True, required=False)
+
+    class Meta:
+        model = PaymentType
+        fields = '__all__'
+
+
+class TransactionSerializer(serializers.ModelSerializer):
+    updated_by = serializers.ReadOnlyField(source='updated_by.username')
+
+    class Meta:
+        model = Transaction
+        fields = '__all__'
+
+    def update(self, instance, validated_data):
+        request = self.context['request']
+        validated_data['updated_by'] = self.context['request'].user
+        status = validated_data.get('status', None)
+        if status:
+            perm = None
+            if status == 1:
+                perm = 'approve_transactions'
+            elif status == 2:
+                perm = 'decline_transactions'
+
+            if perm and not IsUserPermittedAdv(request, perm):
+                raise serializers.ValidationError(constants.NOT_ALLOWED)
+
+        for key, val in validated_data.items():
+            setattr(instance, key, val)
+        instance.save(update_fields=validated_data.keys())
+        return instance

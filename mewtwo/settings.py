@@ -41,16 +41,20 @@ INSTALLED_APPS = [
     'django_otp.plugins.otp_totp'
 ]
 
+DEFAULT_REQUEST_RATE_LIMIT = '5/minute'
+
 START_APPS = [
     'account',
     'loginsvc',
-    'qrpayment'
+    'qrpayment',
+    'configsetting'
 ]
 INSTALLED_APPS += START_APPS
 
 THIRD_PARTY_APPS = [
     'oauth2_provider',
-    'rest_framework'
+    'rest_framework',
+    'django_extensions'
 ]
 
 INSTALLED_APPS += THIRD_PARTY_APPS
@@ -71,6 +75,17 @@ OAUTH2_PROVIDER = {
     'ACCESS_TOKEN_EXPIRE_SECONDS': 3600,  # 1 hour
     'REFRESH_TOKEN_EXPIRE_SECONDS': 86400,  # 24 hour
     'OAUTH_DELETE_EXPIRED': True,
+}
+
+REST_FRAMEWORK = {
+
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_PAGINATION_CLASS':
+        'rest_framework.pagination.LimitOffsetPagination',
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
+    'NON_FIELD_ERRORS_KEY': 'error_code'  # RESPONSE/ERROR RENDERING
 }
 
 ROOT_URLCONF = 'mewtwo.urls'

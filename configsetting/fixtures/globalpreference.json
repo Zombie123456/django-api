@@ -1,0 +1,11 @@
+[{
+    "model": "configsetting.globalpreference",
+    "pk": 1,
+    "fields": {
+        "key": "throttling_rate",
+        "value": "100/minute",
+        "display_name": "请求率限制",
+        "type": 1,
+        "note": "格式：请求/周期的数量 \n* number of request - integer \n* period: can be second, minute,hour, day. \nExample: 5 / minute "
+    }
+}]
