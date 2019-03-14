@@ -102,7 +102,6 @@ class PaymentTypeViewSet(mixins.RetrieveModelMixin,
 
     model = PaymentType
     permission_classes = [Or(IsStaff, IsAdmin)]
-    permission_classes = []
     queryset = PaymentType.objects.all()
     serializer_class = PaymentTypeSerializer
     renderer_classes = [MewtwoRenderer]
@@ -117,7 +116,6 @@ class QRCodeViewSet(mixins.RetrieveModelMixin,
 
     model = QRCode
     permission_classes = [Or(IsStaff, IsAdmin)]
-    permission_classes = []
     queryset = QRCode.objects.all()
     serializer_class = QRCodeSerializer
 
@@ -128,7 +126,6 @@ class TransactionViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin,
     model = Transaction
     queryset = Transaction.objects.all().order_by('-created_at')
     permission_classes = [Or(IsStaff, IsAdmin)]
-    permission_classes = []
     serializer_class = TransactionSerializer
     renderer_classes = [MewtwoRenderer]
     filter_class = TransactionFilter
