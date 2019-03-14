@@ -115,8 +115,7 @@ def refresh_access_token(request):
         return generate_response(constants.NOT_ALLOWED,
                                  _('This account has been suspended'))
 
-    url = f'{request.scheme}://{request.get_host()}/o/token/'
-
+    url = f'{request.scheme}://{request.get_host()}/v1/o/token/'
     data = {'grant_type': 'refresh_token',
             'client_id': client_id,
             'client_secret': client_secret,
