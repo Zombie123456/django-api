@@ -54,7 +54,8 @@ INSTALLED_APPS += START_APPS
 THIRD_PARTY_APPS = [
     'oauth2_provider',
     'rest_framework',
-    'django_extensions'
+    'django_extensions',
+    'corsheaders'
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -82,13 +83,21 @@ OAUTH2_PROVIDER = {
 }
 
 REST_FRAMEWORK = {
-
+    'EXCEPTION_HANDLER': 'mewtwo.utils.custom_exception_handler',
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+    ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_PAGINATION_CLASS':
         'rest_framework.pagination.LimitOffsetPagination',
-    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
     'NON_FIELD_ERRORS_KEY': 'error_code'  # RESPONSE/ERROR RENDERING
 }
 
