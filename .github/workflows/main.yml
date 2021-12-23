@@ -21,17 +21,12 @@ jobs:
       - name: Initialize Dapr
         shell: pwsh
         run: |
-          # Get the credentials to K8s to use with dapr init
-          az aks get-credentials --resource-group ${{ env.RG_NAME }} --name "${{ steps.azure-deployment.outputs.aksName }}"
   
           # Initialize Dapr    
           # Group the Dapr init logs so these lines can be collapsed.
           Write-Output "::group::Initialize Dapr"
-          dapr init --kubernetes --wait --runtime-version ${{ env.DAPR_VERSION }}
+          dapr init
           Write-Output "::endgroup::"
-      
-          dapr status --kubernetes
-
       - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
