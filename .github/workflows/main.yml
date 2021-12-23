@@ -1,0 +1,47 @@
+name: unittest
+
+on:
+  pull_request:
+    branches:
+    - "*"
+
+jobs:
+  unittest:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [ 3.10 ]
+
+    steps:
+      - name: Install Dapr
+        uses: dapr/setup-dapr@v1
+        with:
+          version: '1.5.0'
+
+      - name: Initialize Dapr
+        shell: pwsh
+        run: |
+          # Get the credentials to K8s to use with dapr init
+          az aks get-credentials --resource-group ${{ env.RG_NAME }} --name "${{ steps.azure-deployment.outputs.aksName }}"
+  
+          # Initialize Dapr    
+          # Group the Dapr init logs so these lines can be collapsed.
+          Write-Output "::group::Initialize Dapr"
+          dapr init --kubernetes --wait --runtime-version ${{ env.DAPR_VERSION }}
+          Write-Output "::endgroup::"
+      
+          dapr status --kubernetes
+        working-directory: ./twitter-sentiment-processor/demos/demo3
+
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install Dependencies
+        run: pip install -r requirements-deploy.txt
+
+      - name: Run Tests
+        run: python manage.py test
