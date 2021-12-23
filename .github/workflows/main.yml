@@ -2,8 +2,7 @@ name: unittest
 
 on:
   push:
-    branches:
-    - "*"
+    branches: [feat/dashboard-api ]
 
 jobs:
   unittest:
