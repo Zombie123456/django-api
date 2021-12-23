@@ -34,7 +34,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Install Dependencies
-        run: pip install -r requirements-deploy.txt
+        run: pip install -r requirements.txt
 
       - name: Run Tests
         run: python manage.py test
