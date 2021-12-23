@@ -26,7 +26,6 @@ urllib3==1.24.1
 django-storages==1.7.1
 google-cloud-storage==1.14.0
 drf-yasg==1.14.0
-google-python-cloud-debugger==2.10
 django-redis==4.10.0
 colorlog==4.0.2
 gunicorn==19.9.0
