@@ -31,7 +31,6 @@ jobs:
           Write-Output "::endgroup::"
       
           dapr status --kubernetes
-        working-directory: ./twitter-sentiment-processor/demos/demo3
 
       - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
